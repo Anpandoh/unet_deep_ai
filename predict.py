@@ -6,7 +6,7 @@ from keras.models import load_model
 from data import saveResult, testGenerator
 
 # Load the saved model
-model = load_model("unet_membrane.keras")
+model = load_model("unet_membrane2.keras")
 print("Model loaded successfully!")
 
 # Get test data
