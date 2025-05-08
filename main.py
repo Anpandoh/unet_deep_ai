@@ -16,7 +16,7 @@ data_gen_args = dict(
     fill_mode="nearest",
 )
 myGene = trainGenerator(
-    2, "data/membrane/train", "image", "label", data_gen_args, save_to_dir=None
+    2, "data/membrane/train_20", "image", "label", data_gen_args, save_to_dir=None
 )
 
 model = unet()
@@ -28,14 +28,15 @@ model.fit(myGene, steps_per_epoch=2000, epochs=5, callbacks=[model_checkpoint])
 # For evaluation, we'll just load the best model and run prediction in the separate predict.py script
 print("Training complete! Use predict.py to generate segmentation results.")
 
-# Get test data from the generator
-testGene = testGenerator("data/membrane/test")
+# Get test data from the generator - using last 10 training images
+testGene = testGenerator("data/membrane/train_last10")
 # For modern Keras, predict one image at a time
-num_test_images = 30  # Assuming there are 30 test images as in the original code
+num_test_images = 10  # Using last 10 training images
 results = []
 for i in range(num_test_images):
     img = next(testGene)
     result = model.predict(img, verbose=0)
     results.append(result[0])
 
-saveResult("data/membrane/test", np.array(results))
+# Save results in a new directory to keep them separate
+saveResult("data/membrane/train_last10_results", np.array(results))
